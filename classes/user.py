@@ -48,7 +48,7 @@ class User:
             "very active": 1.725,
             "extra active": 1.9,
         }
-        return bmr * activity_multiplier[self.activity_level]
+        return round(bmr * activity_multiplier[self.activity_level])
 
     def to_dict(self):
         return {

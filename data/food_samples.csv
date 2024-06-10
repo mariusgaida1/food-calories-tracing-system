@@ -1,0 +1,2 @@
+sample_id,user_id,food_items
+1,1,"[{'name': 'Orange Juice', 'calories': 45.0}, {'name': 'Lamb', 'calories': 648.0}, {'name': 'Ice Cream', 'calories': 207.0}]"

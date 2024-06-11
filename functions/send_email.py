@@ -3,31 +3,47 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
 from classes.food_sample_manager import FoodSampleManager
+
 food_sample_manager = FoodSampleManager()
 
+
 def send_email(manager):
+    """
+    Send an email with food samples information to the current user.
+
+    Args:
+        manager (UserManager): An instance of UserManager.
+    """
+
+    # Ensure food samples are up-to-date
     food_sample_manager.reload_food_samples()
+
+    # Check if a user is signed in
     if not manager.current_user:
         print("No user is currently signed in.")
         return
 
-
-
-    sample_ids = input("Enter the food sample IDs to send (comma-separated): ").split(',')
+    sample_ids = input("Enter the food sample IDs to send (comma-separated): ").split(
+        ","
+    )
     sample_ids = [id.strip() for id in sample_ids]
 
+    # Retrieve user ID of the current user
     user_id = manager.current_user.user_id
+
+    # Get all food samples associated with the current user
     samples = food_sample_manager.get_user_food_samples(user_id)
 
-
-
-
-    selected_samples = [sample for sample in samples if str(sample.sample_id) in sample_ids]
+    # Filter selected samples based on user input sample IDs
+    selected_samples = [
+        sample for sample in samples if str(sample.sample_id) in sample_ids
+    ]
 
     if not selected_samples:
         print("No matching food samples found.")
         return
-    
+
+    # Prepare email content
     email_content = ""
     for sample in selected_samples:
         email_content += f"Sample ID: {sample.sample_id}\n"
@@ -35,10 +51,11 @@ def send_email(manager):
             email_content += f"  {item.name} - {item.calories} calories\n"
         email_content += f"Total Calories: {sample.total_calories()}\n"
 
-
         current_user = manager.users.get(user_id)
         if current_user:
-            email_content += f"User's Daily Calories: {round(current_user.daily_calories)}\n"
+            email_content += (
+                f"User's Daily Calories: {round(current_user.daily_calories)}\n"
+            )
         else:
             print("Current user not found.")
 
@@ -54,15 +71,15 @@ def send_email(manager):
     body = email_content
 
     msg = MIMEMultipart()
-    msg['From'] = sender_email
-    msg['To'] = receiver_email
-    msg['Subject'] = subject
+    msg["From"] = sender_email
+    msg["To"] = receiver_email
+    msg["Subject"] = subject
 
-    msg.attach(MIMEText(body, 'plain'))
+    msg.attach(MIMEText(body, "plain"))
 
     try:
         gmail_password = "klut fmkz layn mxtx"
-        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
         server.login(sender_email, gmail_password)
         text = msg.as_string()

@@ -1,13 +1,8 @@
-from classes.food_sample_manager import FoodSampleManager
 from .create_new_food_sample import create_new_daily_food_sample
 from .see_food_samples_statistics import see_food_samples_statistics
 from .update_user_profile import update_user_profile
 from .send_email import send_email
 from .delete_food_sample import delete_food_sample
-
-
-food_sample_manager = FoodSampleManager()
-
 
 def user_profile_menu(manager):
     """

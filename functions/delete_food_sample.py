@@ -10,6 +10,9 @@ def delete_food_sample(manager):
     Args:
         manager (UserManager): An instance of UserManager.
     """
+    
+    food_sample_manager.reload_food_samples()
+
     sample_id = input("Enter the ID of the food sample to delete: ")
 
     # Retrieve the current user's ID from the manager
